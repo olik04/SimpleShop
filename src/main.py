@@ -6,6 +6,7 @@ from api import router as api_router
 from core import settings
 from core.models import db_helper
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
@@ -25,4 +26,4 @@ if __name__ == '__main__':
         host=settings.run.host,
         port=settings.run.port,
         reload=True,
-    ) 
+    )
