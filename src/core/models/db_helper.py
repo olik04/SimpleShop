@@ -31,7 +31,7 @@ class DatabaseHelper:
             bind=self.engine,
             autoflush=False,
             autocommit=False,
-            expire_in_commit=False,
+            expire_on_commit=False,
         )
 
     def get_scoped_session(self):
@@ -42,9 +42,9 @@ class DatabaseHelper:
         return session
 
     async def session_dependency(self) -> AsyncSession:
-        async with self.get_scoped_session() as session:
+        async with self.session_factory() as session:
             yield session
-            await session.remove()
+            await session.close()
 
     async def dispose(self) -> None:
         await self.engine.dispose()

@@ -6,7 +6,7 @@ class UserBase(BaseModel):  # User model that could be seen by customer
     email: EmailStr
 
 
-class UserCreate(BaseModel):
+class UserCreate(UserBase):
     pass
 
 
