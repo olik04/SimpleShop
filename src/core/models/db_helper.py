@@ -1,9 +1,11 @@
+from asyncio import current_task
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncEngine,
     async_sessionmaker,
-    AsyncSession, 
+    AsyncSession,
+    async_scoped_session,
 )
 
 from core import settings
@@ -17,7 +19,6 @@ class DatabaseHelper:
         echo_pool: bool = False,
         pool_size: int = 5,
         max_overflow: int = 10,
-
     ) -> None:
         self.engine: AsyncEngine = create_async_engine(
             url=url,
@@ -27,12 +28,24 @@ class DatabaseHelper:
             max_overflow=max_overflow,
         )
         self.session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
-            bind = self.engine,
-            autoflush = False,
-            autocommit = False,
-            expire_in_commit = False,
+            bind=self.engine,
+            autoflush=False,
+            autocommit=False,
+            expire_in_commit=False,
         )
-    
+
+    def get_scoped_session(self):
+        session = async_scoped_session(
+            session_factory=self.session_factory,
+            scopefunc=current_task,
+        )
+        return session
+
+    async def session_dependency(self) -> AsyncSession:
+        async with self.get_scoped_session() as session:
+            yield session
+            await session.remove()
+
     async def dispose(self) -> None:
         await self.engine.dispose()
 

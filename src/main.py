@@ -14,13 +14,14 @@ async def lifespan(app: FastAPI):
     # shutdown
     await db_helper.dispose()
 
+
 app = FastAPI()
 app.include_router(
     api_router,
     prefix=settings.api.prefix,
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     uvicorn.run(
         app="main:app",
         host=settings.run.host,

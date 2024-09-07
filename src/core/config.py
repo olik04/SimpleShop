@@ -10,6 +10,7 @@ class RunConfig(BaseModel):
 class ApiPrefix(BaseModel):
     prefix: str = "/api"
 
+
 class DatabaseConfig(BaseModel):
     url: PostgresDsn
     echo: bool = False
