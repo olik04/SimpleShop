@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from core import settings
 from core.schemas.user import UserRead, UserCreate
 from .fastapi_users_router import fastapi_users
-from api.dependencies.auth.backend import auth_backend
+from api.dependencies.auth import auth_backend
 
 router = APIRouter(
     prefix=settings.api.v1.auth,
@@ -12,10 +12,20 @@ router = APIRouter(
 
 # /login & /logout
 router.include_router(
-    router=fastapi_users.get_auth_router(auth_backend),
+    router=fastapi_users.get_auth_router(auth_backend, requires_verification=True),
 )
 
 # /register
 router.include_router(
     router=fastapi_users.get_register_router(UserRead, UserCreate),
+)
+
+# /request-verify-token & /verify
+router.include_router(
+    router=fastapi_users.get_verify_router(UserRead),
+)
+
+# /forgot-password & /reset-password
+router.include_router(
+    router=fastapi_users.get_reset_password_router(),
 )

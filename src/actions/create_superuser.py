@@ -3,8 +3,8 @@ import contextlib
 
 from pydantic import EmailStr
 
-from api.dependencies.auth.users import get_users_db
-from api.dependencies.auth.user_manager import get_user_manager
+from api.dependencies.auth import get_users_db
+from api.dependencies.auth import get_user_manager
 from core import settings
 from core.auth.user_manager import UserManager
 from core.models import db_helper, User
