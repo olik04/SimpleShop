@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, PostgresDsn, EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -40,6 +40,15 @@ class AccessToken(BaseModel):
     verification_token_secret: str
 
 
+class UserDefaults(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env",),
@@ -51,6 +60,7 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     db: DatabaseConfig
     access_token: AccessToken
+    user_defaults: UserDefaults
 
 
 settings = Settings()
