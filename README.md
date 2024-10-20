@@ -1,4 +1,5 @@
 # Installation
+### Application
 1. Clone the repository
 2. Create a virtual environment
    ```commandline
@@ -18,19 +19,8 @@ For MacOS/Linux:
     ```commandline
     python -m pip install -r requirements.txt
     ```
-5. Run docker containers \
-For Windows:
-    ```commandline
-    docker-compose up -d
-    ```
-   \
-For MacOS/Linux:
-    ```commandline
-    docker compose up -d
-    ```
-
-6. Run the application
+5. Run the application
     ```commandline
     python main.py
     ```
-7. Open the browser and go to http://localhost:8000/docs
+6. Open the browser and go to http://localhost:8000/docs

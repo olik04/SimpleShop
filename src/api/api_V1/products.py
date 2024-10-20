@@ -5,9 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import or_
 
+from fastapi_cache.decorator import cache
+
 from core import settings
 from core.schemas.product import ProductCreate, ProductRead, ProductUpdate
 from core.models import Product, db_helper
+
 
 router = APIRouter(
     prefix=settings.api.v1.products,
@@ -27,8 +30,10 @@ async def create_product(
 
 
 @router.get("/{product_id}", response_model=ProductRead)
+@cache(expire=3600)
 async def read_product(
-    product_id: int, db: AsyncSession = Depends(db_helper.session_getter)
+    product_id: int,
+    db: AsyncSession = Depends(db_helper.session_getter),
 ):
     result = await db.execute(select(Product).filter(Product.id == product_id))
     db_product = result.scalars().first()
@@ -68,6 +73,7 @@ async def delete_product(
 
 
 @router.get("/search/", response_model=List[ProductRead])
+@cache(expire=3600)
 async def search_products(
     keywords: str = Query(..., min_length=1),
     db: AsyncSession = Depends(db_helper.session_getter),

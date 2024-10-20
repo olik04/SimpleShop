@@ -34,6 +34,10 @@ class DatabaseConfig(BaseModel):
     max_overflow: int = 10
 
 
+class RedisConfig(BaseModel):
+    url: str
+
+
 class AccessToken(BaseModel):
     lifetime_seconds: int = 3600
     reset_password_token_secret: str
@@ -59,6 +63,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     run: RunConfig = RunConfig()
     db: DatabaseConfig
+    redis: RedisConfig
     access_token: AccessToken
     user_defaults: UserDefaults
 

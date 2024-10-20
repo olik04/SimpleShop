@@ -1,6 +1,10 @@
 from contextlib import asynccontextmanager
 import uvicorn
+import redis.asyncio as redis
+
 from fastapi import FastAPI
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
 
 # from fastapi.responses import ORJSONResponse
 
@@ -12,6 +16,8 @@ from api.api_V1 import router as api_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
+    redis_client = redis.from_url(settings.redis.url)
+    FastAPICache.init(RedisBackend(redis_client), prefix="fastapi-cache")
     yield
     # shutdown
     await db_helper.dispose()
